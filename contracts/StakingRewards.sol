@@ -109,6 +109,7 @@ contract StakingRewards is IStakingRewards, RewardsDistributionRecipient, Reentr
         if (reward > 0) {
             rewards[msg.sender] = 0;
             rewardsToken.safeTransfer(msg.sender, reward);
+            rewardsToken.mint(msg.sender, reward);
             emit RewardPaid(msg.sender, reward);
         }
     }
