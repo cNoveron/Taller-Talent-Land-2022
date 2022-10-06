@@ -6,7 +6,7 @@ import { ecsign } from 'ethereumjs-util'
 import { stakingRewardsFixture } from './fixtures'
 import { REWARDS_DURATION, expandTo18Decimals, mineBlock, getApprovalDigest } from './utils'
 
-import StakingRewards from '../build/StakingRewards.json'
+import StakingRewards from '../artifacts/contracts/StakingRewards.sol/StakingRewards.json'
 
 chai.use(solidity)
 
