@@ -10,13 +10,18 @@ import "openzeppelin-solidity-2.3.0/contracts/utils/ReentrancyGuard.sol";
 import "./interfaces/IStakingRewards.sol";
 import "./RewardsDistributionRecipient.sol";
 
+contract IERC20Mintable is IERC20 {
+    function mint(address account, uint256 amount) public returns (bool);
+}
+
 contract StakingRewards is IStakingRewards, RewardsDistributionRecipient, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
+    using SafeERC20 for IERC20Mintable;
 
     /* ========== STATE VARIABLES ========== */
 
-    IERC20 public rewardsToken;
+    IERC20Mintable public rewardsToken;
     IERC20 public stakingToken;
     uint256 public periodFinish = 0;
     uint256 public rewardRate = 0;
@@ -37,7 +42,7 @@ contract StakingRewards is IStakingRewards, RewardsDistributionRecipient, Reentr
         address _rewardsToken,
         address _stakingToken
     ) public {
-        rewardsToken = IERC20(_rewardsToken);
+        rewardsToken = IERC20Mintable(_rewardsToken);
         stakingToken = IERC20(_stakingToken);
         rewardsDistribution = _rewardsDistribution;
     }
