@@ -29,6 +29,7 @@ export async function stakingRewardsFixture([wallet]: Wallet[]): Promise<Staking
     rewardsToken.address,
     stakingToken.address,
   ])
+  await rewardsToken.addMinter(stakingRewards.address)
 
   return { stakingRewards, rewardsToken, stakingToken }
 }
