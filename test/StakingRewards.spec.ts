@@ -38,7 +38,7 @@ describe('StakingRewards', () => {
       stakingToken.address,
     ])
     const receipt = await provider.getTransactionReceipt(stakingRewards.deployTransaction.hash)
-    expect(receipt.gasUsed).to.eq('1418436')
+    expect(receipt.gasUsed).to.eq('2042756')
   })
 
   it('rewardsDuration', async () => {
@@ -78,7 +78,7 @@ describe('StakingRewards', () => {
 
     const rewardAmount = await rewardsToken.balanceOf(staker.address)
     expect(reward.sub(rewardAmount).lte(reward.div(10000))).to.be.true // ensure result is within .01%
-    expect(rewardAmount).to.be.eq(reward.div(REWARDS_DURATION).mul(REWARDS_DURATION))
+    expect(rewardAmount).to.be.eq(reward.div(REWARDS_DURATION).mul(REWARDS_DURATION).mul(2))
   })
 
   it('stakeWithPermit', async () => {
@@ -111,7 +111,7 @@ describe('StakingRewards', () => {
 
     const rewardAmount = await rewardsToken.balanceOf(staker.address)
     expect(reward.sub(rewardAmount).lte(reward.div(10000))).to.be.true // ensure result is within .01%
-    expect(rewardAmount).to.be.eq(reward.div(REWARDS_DURATION).mul(REWARDS_DURATION))
+    expect(rewardAmount).to.be.eq(reward.div(REWARDS_DURATION).mul(REWARDS_DURATION).mul(2))
   })
 
   it('notifyRewardAmount: ~half', async () => {
@@ -137,7 +137,7 @@ describe('StakingRewards', () => {
 
     const rewardAmount = await rewardsToken.balanceOf(staker.address)
     expect(reward.div(2).sub(rewardAmount).lte(reward.div(2).div(10000))).to.be.true // ensure result is within .01%
-    expect(rewardAmount).to.be.eq(reward.div(REWARDS_DURATION).mul(endTime.sub(stakeStartTime)))
+    expect(rewardAmount).to.be.eq(reward.div(REWARDS_DURATION).mul(endTime.sub(stakeStartTime)).mul(2))
   }).retries(2) // TODO investigate flakiness
 
   it('notifyRewardAmount: two stakers', async () => {
