@@ -5,9 +5,9 @@ import { solidity, deployContract } from 'ethereum-waffle'
 import { expandTo18Decimals } from './utils'
 
 import UniswapV2ERC20 from '@uniswap/v2-core/build/ERC20.json'
-import TestERC20 from '../build/TestERC20.json'
-import StakingRewards from '../build/StakingRewards.json'
-import StakingRewardsFactory from '../build/StakingRewardsFactory.json'
+import TestERC20 from '../artifacts/contracts/test/TestERC20.sol/TestERC20.json'
+import StakingRewards from '../artifacts/contracts/StakingRewards.sol/StakingRewards.json'
+// import StakingRewardsFactory from '../artifacts/contracts/StakingRewardsFactory.json'
 
 chai.use(solidity)
 
@@ -31,34 +31,4 @@ export async function stakingRewardsFixture([wallet]: Wallet[]): Promise<Staking
   ])
 
   return { stakingRewards, rewardsToken, stakingToken }
-}
-
-interface StakingRewardsFactoryFixture {
-  rewardsToken: Contract
-  stakingTokens: Contract[]
-  genesis: number
-  rewardAmounts: BigNumber[]
-  stakingRewardsFactory: Contract
-}
-
-export async function stakingRewardsFactoryFixture(
-  [wallet]: Wallet[],
-  provider: providers.Web3Provider
-): Promise<StakingRewardsFactoryFixture> {
-  const rewardsToken = await deployContract(wallet, TestERC20, [expandTo18Decimals(1_000_000_000)])
-
-  // deploy staking tokens
-  const stakingTokens = []
-  for (let i = 0; i < NUMBER_OF_STAKING_TOKENS; i++) {
-    const stakingToken = await deployContract(wallet, TestERC20, [expandTo18Decimals(1_000_000_000)])
-    stakingTokens.push(stakingToken)
-  }
-
-  // deploy the staking rewards factory
-  const { timestamp: now } = await provider.getBlock('latest')
-  const genesis = now + 60 * 60
-  const rewardAmounts: BigNumber[] = new Array(stakingTokens.length).fill(expandTo18Decimals(10))
-  const stakingRewardsFactory = await deployContract(wallet, StakingRewardsFactory, [rewardsToken.address, genesis])
-
-  return { rewardsToken, stakingTokens, genesis, rewardAmounts, stakingRewardsFactory }
 }
